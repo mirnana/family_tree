@@ -11,6 +11,12 @@ use Psr\Log\LoggerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
+        Session::class => function () {
+            // tu dolje umjesto 'test' treba dodati generiranu sifru koju mirna ima doma na laptopu
+            $uri = $_ENV['NEO4J_URI'] ?? 'bolt://neo4j:test@localhost';
+            return Driver::create($uri)->createSession();
+        },
+
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 
