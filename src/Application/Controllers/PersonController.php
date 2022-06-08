@@ -11,9 +11,13 @@ use function json_encode;
 
 // pozabaviti se cypher upitima!
 final class PersonController {
-    public function __construct(private Session $session) {
+    private Session $session;
+
+    public function __construct(Session $session) {
+        $this->session = $session;
     }
 
+    // ispis svih osoba
     public function listPersons(Request $request, Response $response): Response {
         $persons = $this->session->run(<<<'CYPHER'
         MATCH (p:Person)
@@ -29,14 +33,16 @@ final class PersonController {
         return $response;
     }
 
-    // ova fja nam ne bi smjela trebati al nek stoji:
+    // ispis jedne osobe prema id-u
     public function getPerson(Request $request, Response $response): Response {
         $query = $request->getQueryParams();
         $person = $this->session->run(<<<'CYPHER'
-        MATCH (u:Person {id: $id})
-        RETURN  u.firstName AS firstname,
-                u.secondName AS secondName,
-                u.id AS id
+        MATCH (p:Person {id: $id})
+        RETURN  p.firstName AS firstname,
+                p.lastName AS lastName,
+                p.familyName AS familyName,
+                p.birthYear AS birthYear,
+                p.gender AS gender
         CYPHER, $query);
 
         if ($person->isEmpty()) {
@@ -48,6 +54,7 @@ final class PersonController {
         return $response;
     }
 
+    // kreiranje osobe prema atributima, generiranje id-ja
     public function createPerson(Request $request, Response $response): Response {
         $id = Uuid::generate();
         /** @var array */
@@ -55,26 +62,44 @@ final class PersonController {
         $parsedBody['id'] = $id;
 
         $this->session->run(<<<'CYPHER'
-        CREATE (u:Person {id: $id, firstName: $firstName, secondName: $secondName})
+        CREATE (p:Person {
+            id: $id, 
+            firstName: $firstName, 
+            lastName: $lastName,
+            familyName: $familyName,
+            birthYear: $birthYear,
+            gender: $gender
+        })
         CYPHER, $parsedBody);
 
         return $response->withStatus(201)
             ->withHeader('Location', '/person?id=' . $id);
     }
 
+    // brisanje osobe iz baze prema id-ju
     public function deletePerson(Request $request, Response $response): Response {
         $this->session->run(<<<'CYPHER'
-        MATCH (u:Person {id: $id})
-        DETACH DELETE u
+        MATCH (p:Person {id: $id})
+        DETACH DELETE p
         CYPHER, $request->getQueryParams());
 
         return $response->withStatus(204);
     }
 
+    // izmjena podataka o osobi prema id-u
     public function modifyPerson(Request $request, Response $response): Response {
         $query = $request->getQueryParams();
         // match (person) set (property) return
+        // ne znam kako napraviti izmjenu samo jednog propertyja zbog nacina na koji radi getQueryParams()
+        // stoga bih ili mijenjala sve podatke, ili kreirala novi cvor, kopirala veze i obrisala stari cvor
+        // prva opcija mi ima daleko vise smisla: u viewu napravimo formu #izmjena, korisnik promijeni sta hoce i posalje sve atribute nama u controller. onda controllerom updateamo "sve stupce"
+        $this->session->run(<<<'CYPHER'
+        MATCH (p:Person {id: $id})
+        SET p.firstName = $firstName, 
+            p.lastName = $lastName,
+            p.familyName = $familyName,
+            p.birthYear = $birthYear,
+            p.gender = $gender
+        CYPHER, $query);
     }
 }
-
-/* nisam shvatila sto ovo znaci: By adding the session as a parameter in the controllers’ constructor, we automatically tell the application to inject it. By defining a Session key in the dependencies’ definition, we provided enough information to the application to successfully inject the parameter of this type.*/

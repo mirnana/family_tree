@@ -1,0 +1,13 @@
+sudo apt update
+sudo apt-get install composer (trebao bi se instalirati composer verzije >=2).
+
+-------------------------
+
+https://neo4j.com/developer-blog/how-to-build-a-json-restful-api-with-neo4j-php-and-openapi/
+|
+-> pratiti doslovno. kreirala sam bazu na AuraDB, zove se family_tree, kao i projekt u slimu imenom family_tree. Bazu ce trebati napuniti CSV-ovima!
+
+da bi se aplikacija pokrenula, treba otvoriti terminal u direktoriju family_tree i pokrenuti naredbu `composer start`. potom se output vidi na http://localhost:8080
+--> ako se javlja error da je uticnica 8080 vec u upotrebi: https://stackoverflow.com/a/33560446
+
+
