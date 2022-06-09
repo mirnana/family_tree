@@ -27,6 +27,7 @@
         "laudis/neo4j-php-client": "^2.6",
         "monolog/monolog": "^2.3",
         "php-di/php-di": "^6.3",
+        "slim/php-view": "^3.1",
         "slim/psr7": "^1.5",
         "slim/slim": "^4.9",
         "vlucas/phpdotenv": "^5.4"
@@ -48,7 +49,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Slim\\Views\\": "src"
         }
     },
     "autoload-dev": {

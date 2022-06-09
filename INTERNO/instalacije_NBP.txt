@@ -10,4 +10,9 @@ https://neo4j.com/developer-blog/how-to-build-a-json-restful-api-with-neo4j-php-
 da bi se aplikacija pokrenula, treba otvoriti terminal u direktoriju family_tree i pokrenuti naredbu `composer start`. potom se output vidi na http://localhost:8080
 --> ako se javlja error da je uticnica 8080 vec u upotrebi: https://stackoverflow.com/a/33560446
 
+-------------------------
 
+composer require slim/php-view
+
+https://github.com/slimphp/PHP-View -> za view. treba dobro procitat readme, vjerujem da ce pomoc pri umetanju renderera i templatea u projekt
+https://github.com/skateboard/banking/blob/master/index.php -> jednostavan primjer projekta koji koristi php-view

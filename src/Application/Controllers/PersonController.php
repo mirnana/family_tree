@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use function json_encode;
 
-// pozabaviti se cypher upitima!
 final class PersonController {
     private Session $session;
 
@@ -101,5 +100,8 @@ final class PersonController {
             p.birthYear = $birthYear,
             p.gender = $gender
         CYPHER, $query);
+
+        return $response->withStatus(201)
+            ->withHeader('Location', '/modifyperson?id=' . $id);
     }
 }

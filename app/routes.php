@@ -17,12 +17,18 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('Hello world!');
-        return $response;
+        return $response->withHeader('Content-Type', 'text/plain');;
     });
 
     
-    $app->group('/users', function (Group $group) {
-        $group->get('', ListUsersAction::class);
-        $group->get('/{id}', ViewUserAction::class);
-    });
+    $app->get('/persons', [PersonController::class, 'listPersons']);
+    $app->get('/person', [PersonController::class, 'getPerson']);
+    $app->post('/person', [PersonController::class, 'createPerson']);
+    $app->post('/modifyperson', [PersonController::class, 'modifyPerson']); // vidjeti kako radi ovaj header
+    $app->delete('/person', [PersonController::class, 'deletePerson']);
+
+    // za view možemo nešto tipa:
+    /*$app->group('/persons', function() use ($app) {
+        $app->post('/nešto', [new PersonController(), 'createPerson']);
+    });*/
 };
