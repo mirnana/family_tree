@@ -22,10 +22,10 @@ return function (App $app) {
         return $renderer->render($response, "hello.html", $args);
     });
 
-    $app->get('/', function (Request $request, Response $response) {
+    /*$app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('Hello world!');
         return $response->withHeader('Content-Type', 'text/plain');;
-    });
+    });*/
 
     
     $app->get('/person', [PersonController::class, 'listPersons']);
