@@ -16,17 +16,12 @@ return function (App $app) {
         return $response;
     });
 
+    // primjer kako dati viewu argumente koje mozemo koristiti u html templejtu:
     $app->get('/', function (Request $request, Response $response) {
         $renderer = new PhpRenderer("../views"); // to je putanja do viewova
-        $args = [];
+        $args = ['mirnakey' => 'mirna'];
         return $renderer->render($response, "hello.html", $args);
     });
-
-    /*$app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
-        return $response->withHeader('Content-Type', 'text/plain');;
-    });*/
-
     
     $app->get('/person', [PersonController::class, 'listPersons']);
     $app->get('/person/getone', [PersonController::class, 'getPerson']);
