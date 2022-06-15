@@ -17,17 +17,27 @@ return function (App $app) {
     });
 
     // primjer kako dati viewu argumente koje mozemo koristiti u html templejtu:
-    $app->get('/', function (Request $request, Response $response) {
+    /*$app->get('/', function (Request $request, Response $response) {
         $renderer = new PhpRenderer("../views"); // to je putanja do viewova
         $args = ['mirnakey' => 'mirna'];
         return $renderer->render($response, "hello.html", $args);
     });
-    
+    */
+    $app->get('/persons', function(Request $request, Response $response) use ($app) {
+        $app->get('/persons', [PersonController::class, 'listPersons']);
+        $args = ['response' => $response];
+        $renderer = new PhpRenderer("../views"); // to je putanja do viewova
+        return $renderer->render($response, "hello.html", $args);
+
+    });
+
+    /*
     $app->get('/person', [PersonController::class, 'listPersons']);
     $app->get('/person/getone', [PersonController::class, 'getPerson']);
     $app->post('/person', [PersonController::class, 'createPerson']);
     $app->post('/person/modify', [PersonController::class, 'modifyPerson']); // vidjeti kako radi ovaj header
     $app->delete('/person', [PersonController::class, 'deletePerson']);
+    */
 
     // za view možemo nešto tipa:
     /*$app->group('/persons', function() use ($app) {

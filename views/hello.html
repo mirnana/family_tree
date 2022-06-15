@@ -10,7 +10,18 @@
 </head>
 <body>
     <p>pozdrav, svijete!</p>
-    <p> <?php echo $mirnakey; ?> </p>
+    <p> <?php if(isset($mirnakey)) echo $mirnakey; ?> </p>
+    <p> <?php if(isset($response)) print_r($response);; ?> </p>
+
+    <table>
+        <?php 
+            foreach($data as $p) {
+                echo "<tr><td>";
+                print_r($p);
+                echo "</td></tr>";
+            }
+        ?>
+    </table>
 
 </body>
 </html>
